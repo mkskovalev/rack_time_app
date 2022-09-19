@@ -1,5 +1,5 @@
-require_relative 'middleware/link_handler'
+require_relative 'middleware/time_formatter'
 require_relative 'app'
 
-use LinkHandler
+use TimeFormatter
 run App.new
