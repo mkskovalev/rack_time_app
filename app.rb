@@ -8,18 +8,27 @@ class App
 
     if request.path == '/time' && params != nil
       formatter = TimeFormatter.new(params)
-
-      if formatter.success?
-        [ 200,
-          { 'content-type' => 'text/plain' },
-          [ "Format: #{ formatter.formatted_time }\n" ] ]
-      else
-        [ 400,
-          { 'content-type' => 'text/plain' },
-          [ "Unknown time format #{ formatter.unknown_formats }\n" ] ]
-      end
+      formatter_response(formatter)
     else
-      [ 404, {}, [ "Page Not Found\n" ] ]
+      response(404, {}, [ "Page Not Found\n" ])
+    end
+  end
+
+  private
+
+  def response(status, headers, body)
+    [ status, headers, body ]
+  end
+
+  def formatter_response(formatter)
+    if formatter.success?
+      response(200,
+               { 'content-type' => 'text/plain' },
+               [ "Format: #{ formatter.formatted_time }\n" ])
+    else
+      response(400,
+               { 'content-type' => 'text/plain' },
+               [ "Unknown time format #{ formatter.unknown_formats }\n" ])
     end
   end
 end

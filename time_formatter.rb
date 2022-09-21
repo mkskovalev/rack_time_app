@@ -20,17 +20,19 @@ class TimeFormatter
   end
 
   def formatted_time
-    final_format = []
-    @url_formats.each do |value|
-      final_format << Time.now.strftime(FORMATS[value.to_sym])
-    end
-    final_format.join(@separator)
+    final_format = convert_url_formats('formatted').join(@separator)
+    Time.now.strftime(final_format)
   end
 
   def unknown_formats
-    unknown = []
-    @url_formats.each { |value| unknown << value }
+    unknown = convert_url_formats('unknown')
     FORMATS.each_key { |key| unknown.delete(key.to_s) }
     return unknown
+  end
+
+  private
+
+  def convert_url_formats(method)
+    @url_formats.map { |value| method == 'formatted' ? FORMATS[value.to_sym] : value }
   end
 end
