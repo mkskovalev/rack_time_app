@@ -28,7 +28,7 @@ class App
     else
       response(400,
                { 'content-type' => 'text/plain' },
-               [ "Unknown time format #{ formatter.unknown_formats }\n" ])
+               [ "Unknown time format #{ formatter.unknown }\n" ])
     end
   end
 end
