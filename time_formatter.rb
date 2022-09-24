@@ -1,5 +1,4 @@
 class TimeFormatter
-  attr_reader :unknown
 
   FORMATS = {
     year: '%Y',
@@ -14,30 +13,30 @@ class TimeFormatter
     params = params
     @separator = params[/\W|[_]/]
     @url_formats = params.split(@separator)
+    @unknown_formats = []
+    @formatted = []
+  end
+
+  def call
+    @url_formats.each do |value|
+      if FORMATS[value.to_sym].nil?
+        @unknown_formats << value
+      else
+        @formatted << FORMATS[value.to_sym]
+      end
+    end
   end
 
   def success?
-    @converted_formats = @url_formats.map {
-      |value| FORMATS[value.to_sym].nil? ? value : FORMATS[value.to_sym]
-    }
-    @unknown = unknown_formats
-    @unknown.length == 0
+    @unknown_formats.empty?
   end
 
   def formatted_time
-    final_format = @converted_formats.join(@separator)
+    final_format = @formatted.join(@separator)
     Time.now.strftime(final_format)
   end
 
-  private
-
   def unknown_formats
-    unknown = @converted_formats.map { |value| value }
-    FORMATS.each_value { |value| unknown.delete(value.to_s) }
-    return unknown
-  end
-
-  def convert_url_formats(method)
-
+    @unknown_formats.join(', ')
   end
 end

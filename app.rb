@@ -8,6 +8,7 @@ class App
 
     if request.path == '/time' && params != nil
       formatter = TimeFormatter.new(params)
+      formatter.call
       formatter_response(formatter)
     else
       response(404, {}, [ "Page Not Found\n" ])
@@ -28,7 +29,7 @@ class App
     else
       response(400,
                { 'content-type' => 'text/plain' },
-               [ "Unknown time format #{ formatter.unknown }\n" ])
+               [ "Unknown time format: #{ formatter.unknown_formats }\n" ])
     end
   end
 end
